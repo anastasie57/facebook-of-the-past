@@ -20,7 +20,7 @@ def build_base_for_graphs(database):
         if i[0] == 'i':
             i = ''
         break
-        
+    
     for i in opened:
         case = [fact for fact in i.split(';')]
         ## case[1] - author, case[2] - addressee
@@ -38,19 +38,19 @@ def build_base_for_graphs(database):
 
 def make_analyze(nodes, graph):
     html = u'<p><b>Всего участников сообщества:</b>' + str(graph.number_of_nodes()) + '</p>'
-    html = u'<p><b>Самые популярные участники переписки:</b></p><ul>'
+    html += u'<p><b>Самые популярные участники переписки:</b></p><ul>'
     popularity = nx.degree(graph)
     most_popular = max([popularity[node] for node in popularity])
     for node in popularity:
         if popularity[node] > 0.1 * most_popular:
             html += '<li>' + node + '</li>'
     html += '</ul'
-    html = u'<p><b>Самые активные участники переписки:</b></p><ul>'
-    for edge in graph.edges():
-        print edge
-        if edge[0]['weight'] > 0.3 * most_popular:
-            html += '<li>' + ' - '.join(edge)+ '</li>'
-    html += '</ul>'
+##    html += u'<p><b>Самые активные участники переписки:</b></p><ul>'
+##    for edge in graph.edges():
+##        print edge
+##        if edge[0]['weight'] > 0.3 * most_popular:
+##            html += '<li>' + ' - '.join(edge)+ '</li>'
+##    html += '</ul>'
     return html
 
 def make_legend(legend):
@@ -67,6 +67,9 @@ def make_legend(legend):
                 n += 1
             html += u'\r\n</tr>\r\n'
     html += u'</table>'
+    f = codecs.open('legend.html', 'w', 'utf-8')
+    f.write(html)
+    f.close()
     return html
             
 
@@ -163,6 +166,6 @@ def build_graph_for_person(database, info):
 
     return make_analyze(nodes, G)
 
-#build_graph_for_person('metadata (2).csv', u'Лермонтов М.Ю.')
+#build_graph_for_person('tutchev.csv', u'Ф.И.Тютчев')
 
-#print build_graph_for_socium('metadata (2).csv')[1]
+#build_graph_for_socium('tutchev.csv')
